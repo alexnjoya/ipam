@@ -184,6 +184,9 @@ const Subnets: React.FC = () => {
                   CIDR
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Version
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Description
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -206,7 +209,7 @@ const Subnets: React.FC = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredSubnets.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
                     No subnets found. Create your first subnet to get started.
                   </td>
                 </tr>
@@ -219,6 +222,15 @@ const Subnets: React.FC = () => {
                     <tr key={subnet.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{subnet.cidr}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          subnet.ipVersion === 'IPv6' 
+                            ? 'bg-purple-100 text-purple-800' 
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {subnet.ipVersion || 'IPv4'}
+                        </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-500">{subnet.description || '-'}</div>

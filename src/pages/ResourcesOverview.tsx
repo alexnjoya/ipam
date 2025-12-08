@@ -25,7 +25,7 @@ const mockPrefixes = [
 
 const ResourcesOverview: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Organizations' | 'Prefixes'>('Prefixes');
-  const [selectedPrefixIds, setSelectedPrefixIds] = useState<string[]>([]);
+  // const [selectedPrefixIds, setSelectedPrefixIds] = useState<string[]>([]);
 
   return (
     <div className="space-y-6">
