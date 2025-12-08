@@ -1,7 +1,10 @@
+export type IpVersion = 'IPv4' | 'IPv6';
+
 export interface Subnet {
   id: string;
   networkAddress: string;
   subnetMask: number;
+  ipVersion: IpVersion;
   cidr: string;
   description?: string;
   vlanId?: number;
@@ -29,6 +32,7 @@ export interface SubnetListParams {
 export interface CreateSubnetData {
   networkAddress: string;
   subnetMask: number;
+  ipVersion?: IpVersion;
   description?: string;
   vlanId?: number;
   location?: string;
@@ -38,6 +42,7 @@ export interface CreateSubnetData {
 export interface UpdateSubnetData {
   networkAddress?: string;
   subnetMask?: number;
+  ipVersion?: IpVersion;
   description?: string;
   vlanId?: number;
   location?: string;

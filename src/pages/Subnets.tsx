@@ -23,6 +23,7 @@ const Subnets: React.FC = () => {
   const [formData, setFormData] = useState<CreateSubnetData>({
     networkAddress: '',
     subnetMask: 24,
+    ipVersion: 'IPv4',
     description: '',
     vlanId: undefined,
     location: '',
@@ -84,6 +85,7 @@ const Subnets: React.FC = () => {
         setFormData({
           networkAddress: '',
           subnetMask: 24,
+          ipVersion: 'IPv4',
           description: '',
           vlanId: undefined,
           location: '',
@@ -286,11 +288,32 @@ const Subnets: React.FC = () => {
           )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
+              IP Version *
+            </label>
+            <select
+              value={formData.ipVersion || 'IPv4'}
+              onChange={(e) => {
+                const ipVersion = e.target.value as 'IPv4' | 'IPv6';
+                setFormData({
+                  ...formData,
+                  ipVersion,
+                  subnetMask: ipVersion === 'IPv4' ? 24 : 64,
+                  networkAddress: '',
+                });
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="IPv4">IPv4</option>
+              <option value="IPv6">IPv6</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Network Address *
             </label>
             <input
               type="text"
-              placeholder="192.168.1.0"
+              placeholder={formData.ipVersion === 'IPv6' ? '2001:db8::' : '192.168.1.0'}
               required
               value={formData.networkAddress}
               onChange={(e) =>
@@ -305,16 +328,19 @@ const Subnets: React.FC = () => {
             </label>
             <input
               type="number"
-              placeholder="24"
+              placeholder={formData.ipVersion === 'IPv6' ? '64' : '24'}
               min="0"
-              max="32"
+              max={formData.ipVersion === 'IPv6' ? 128 : 32}
               required
               value={formData.subnetMask}
               onChange={(e) =>
-                setFormData({ ...formData, subnetMask: parseInt(e.target.value) || 24 })
+                setFormData({ ...formData, subnetMask: parseInt(e.target.value) || (formData.ipVersion === 'IPv6' ? 64 : 24) })
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
+            <p className="mt-1 text-xs text-gray-500">
+              Range: 0-{formData.ipVersion === 'IPv6' ? '128' : '32'} ({formData.ipVersion === 'IPv6' ? 'IPv6' : 'IPv4'})
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
