@@ -64,7 +64,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const { user: userData, token: authToken } = response.data;
         localStorage.setItem('token', authToken);
         setToken(authToken);
-        setUser(userData);
+        // Convert AuthUser to User (ensure required fields are present)
+        setUser({
+          ...userData,
+          createdAt: userData.createdAt || new Date().toISOString(),
+          updatedAt: userData.updatedAt || new Date().toISOString(),
+        } as User);
       } else {
         throw new Error(response.error || 'Login failed');
       }

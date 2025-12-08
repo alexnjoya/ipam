@@ -1,4 +1,4 @@
-export interface User {
+export interface AuthUser {
   id: string;
   username: string;
   email: string;
@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface LoginResponse {
-  user: User;
+  user: AuthUser;
   token: string;
 }
 

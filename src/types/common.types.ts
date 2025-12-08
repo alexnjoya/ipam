@@ -3,6 +3,7 @@ export interface ChartData {
   value: number;
   percentage: number;
   color: string;
+  [key: string]: string | number;
 }
 
 export interface PrefixTableItem {
