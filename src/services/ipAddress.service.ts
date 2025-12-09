@@ -2,6 +2,7 @@ import BaseApi from './baseApi';
 import type { ApiResponse } from './baseApi';
 import type {
   IpAddress,
+  IpHistory,
   IpAddressListParams,
   AssignIpAddressData,
   UpdateIpAddressData,

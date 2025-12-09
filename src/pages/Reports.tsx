@@ -152,18 +152,17 @@ const Reports: React.FC = () => {
       ]
     : [];
 
-  // Status chart data (currently unused but kept for future use)
-  // const statusChartData: ChartData[] = statusData
-  //   ? Object.entries(statusData).map(([status, count], index) => {
-  //       const total = Object.values(statusData).reduce((sum, val) => sum + val, 0);
-  //       return {
-  //         name: status,
-  //         value: count,
-  //         percentage: parseFloat(((count / total) * 100).toFixed(2)),
-  //         color: ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#6b7280'][index % 5],
-  //       };
-  //     })
-  //   : [];
+  const statusChartData: ChartData[] = statusData
+    ? Object.entries(statusData).map(([status, count], index) => {
+        const total = Object.values(statusData).reduce((sum, val) => sum + val, 0);
+        return {
+          name: status,
+          value: count,
+          percentage: parseFloat(((count / total) * 100).toFixed(2)),
+          color: ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#6b7280'][index % 5],
+        };
+      })
+    : [];
 
   if (loading) {
     return (

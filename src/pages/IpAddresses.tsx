@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../components/Modal/Modal';
 import { ipAddressService, subnetService } from '../services';
-import type { IpStatus, IpAddress, AssignIpAddressData } from '../types';
+import type { IpStatus, IpAddress, AssignIpAddressData, UpdateIpAddressData } from '../types';
 import type { Subnet } from '../types';
 
 // Local interface for display (includes subnet as string for UI)

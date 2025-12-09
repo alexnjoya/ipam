@@ -37,7 +37,7 @@ class BaseApi {
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }
-        return { success: true, data: undefined };
+        return { success: true, data: undefined as T };
       }
 
       if (!response.ok) {
