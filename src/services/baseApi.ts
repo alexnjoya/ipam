@@ -1,18 +1,12 @@
 import type { ApiResponse } from '../types';
 
-// Use environment variable if set, otherwise detect based on hostname
-// Localhost for local dev, production URL for deployed client
+// Use environment variable if set, otherwise use production server
 const getApiBaseUrl = (): string => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
   
-  // If running on localhost, use local server
-  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-    return 'http://localhost:3000/api';
-  }
-  
-  // Otherwise, use production server
+  // Default to production server
   return 'https://ipam-yary.onrender.com/api';
 };
 
