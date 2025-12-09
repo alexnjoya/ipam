@@ -1,16 +1,21 @@
 import type { ApiResponse } from '../types';
 
-// Use environment variable if set, otherwise use production server
+// Use environment variable if set, otherwise use Render production server
 const getApiBaseUrl = (): string => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
   
-  // Default to production server
+  // Default to Render production server
   return 'https://ipam-yary.onrender.com/api';
 };
 
 const API_BASE_URL = getApiBaseUrl();
+
+// Log the API base URL for debugging (only in development)
+if (import.meta.env.DEV) {
+  console.log('API Base URL:', API_BASE_URL);
+}
 
 export type { ApiResponse };
 
@@ -38,7 +43,14 @@ class BaseApi {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      const fullUrl = `${API_BASE_URL}${endpoint}`;
+      
+      // Log request in development
+      if (import.meta.env.DEV) {
+        console.log(`[API Request] ${options.method || 'GET'} ${fullUrl}`);
+      }
+      
+      const response = await fetch(fullUrl, {
         ...options,
         headers,
         signal: controller.signal,
