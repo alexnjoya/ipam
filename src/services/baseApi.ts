@@ -2,20 +2,30 @@ import type { ApiResponse } from '../types';
 
 // Use environment variable if set, otherwise use Render production server
 const getApiBaseUrl = (): string => {
+  let baseUrl: string;
+  
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+    baseUrl = import.meta.env.VITE_API_URL;
+  } else {
+    // Default to Render production server
+    baseUrl = 'https://ipam-yary.onrender.com';
   }
   
-  // Default to Render production server
-  return 'https://ipam-yary.onrender.com/api';
+  // Ensure baseUrl doesn't end with a slash
+  baseUrl = baseUrl.replace(/\/$/, '');
+  
+  // Append /api if not already present
+  if (!baseUrl.endsWith('/api')) {
+    baseUrl = `${baseUrl}/api`;
+  }
+  
+  return baseUrl;
 };
 
 const API_BASE_URL = getApiBaseUrl();
 
-// Log the API base URL for debugging (only in development)
-if (import.meta.env.DEV) {
-  console.log('API Base URL:', API_BASE_URL);
-}
+// Log the API base URL for debugging
+console.log('API Base URL:', API_BASE_URL);
 
 export type { ApiResponse };
 
