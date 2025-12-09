@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 interface SidebarProps {
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
+  isMobileMenuOpen?: boolean;
+  onMobileMenuClose?: () => void;
 }
 
 // Icon components
@@ -58,7 +60,9 @@ const AccountIcon = ({ className }: { className?: string }) => (
 
 const Sidebar: React.FC<SidebarProps> = ({ 
   isCollapsed: externalCollapsed,
-  onToggleCollapse
+  onToggleCollapse,
+  isMobileMenuOpen = false,
+  onMobileMenuClose
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -104,7 +108,96 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <div className={`${isCollapsed ? 'w-20' : 'w-64'} bg-gray-50 border-r border-gray-200 h-screen fixed left-0 top-0 overflow-hidden transition-all duration-300`}>
+    <>
+      {/* Mobile Sidebar */}
+      <div className={`
+        lg:hidden
+        fixed
+        left-0
+        top-0
+        h-screen
+        w-64
+        bg-gray-50
+        border-r
+        border-gray-200
+        z-50
+        transform
+        transition-transform
+        duration-300
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        {/* Mobile Branding */}
+        <div className="p-4 border-b border-gray-200 bg-white">
+          <div className="flex items-center justify-between">
+            <div className="text-lg font-bold text-gray-900">BRANDER GROUP</div>
+            <button 
+              onClick={onMobileMenuClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Close menu"
+            >
+              <svg 
+                className="w-5 h-5 text-gray-600" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        {/* Mobile Navigation */}
+        <nav className="p-2 mt-1 space-y-0.5 overflow-y-auto h-[calc(100vh-73px)]">
+          {menuItems.map((item, index) => {
+            const active = isActive(item.path);
+            return (
+              <div
+                key={index}
+                onClick={() => {
+                  navigate(item.path);
+                  onMobileMenuClose?.();
+                }}
+                className={`flex items-center justify-between px-3 py-1.5 rounded-lg cursor-pointer transition-colors ${
+                  active
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-full ${active ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                    <item.Icon className={`w-5 h-5 ${active ? 'text-blue-700' : 'text-gray-600'}`} />
+                  </div>
+                  <span className={`text-sm font-medium ${active ? 'text-blue-700' : ''}`}>
+                    {item.label}
+                  </span>
+                </div>
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Desktop Sidebar */}
+      <div className={`
+        hidden
+        lg:block
+        ${isCollapsed ? 'w-20' : 'w-64'} 
+        bg-gray-50 
+        border-r 
+        border-gray-200 
+        h-screen 
+        fixed 
+        left-0 
+        top-0 
+        overflow-hidden 
+        transition-all 
+        duration-300
+        z-30
+      `}>
       {/* Branding Section */}
       <div className="p-4 border-b border-gray-200 bg-white">
         <div className="flex items-center justify-between">
@@ -163,7 +256,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           );
         })}
       </nav>
-    </div>
+      </div>
+    </>
   );
 };
 

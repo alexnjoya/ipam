@@ -19,6 +19,7 @@ const Audit: React.FC = () => {
   const fetchAuditLogs = async () => {
     try {
       setLoading(true);
+      setError(''); // Clear previous errors
       const response = await auditService.getAuditLogs({
         page: 1,
         limit: 100,
@@ -31,13 +32,21 @@ const Audit: React.FC = () => {
         
         // Filter by date if provided
         if (dateFilter) {
-          logs = logs.filter((log) => log.timestamp.startsWith(dateFilter));
+          logs = logs.filter((log) => {
+            const logDate = new Date(log.timestamp).toISOString().split('T')[0];
+            return logDate === dateFilter;
+          });
         }
         
         setAuditLogs(logs);
+      } else {
+        setError(response.error || 'Failed to load audit logs');
+        setAuditLogs([]);
       }
     } catch (err: any) {
+      console.error('Error fetching audit logs:', err);
       setError(err.message || 'Failed to load audit logs');
+      setAuditLogs([]);
     } finally {
       setLoading(false);
     }
@@ -79,9 +88,9 @@ const Audit: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Audit & History</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Audit & History</h1>
       </div>
 
       {error && (
@@ -92,20 +101,20 @@ const Audit: React.FC = () => {
 
       {/* Filters */}
       <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
           <div className="flex-1">
             <input
               type="text"
               placeholder="Search by IP address, user, or action..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
             />
           </div>
           <select
             value={actionFilter}
             onChange={(e) => setActionFilter(e.target.value as ActionType | 'ALL')}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
           >
             <option value="ALL">All Actions</option>
             <option value="created">Created</option>
@@ -118,16 +127,18 @@ const Audit: React.FC = () => {
             type="date"
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
           />
         </div>
       </div>
 
       {/* Audit Logs Table */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Timestamp
@@ -196,7 +207,9 @@ const Audit: React.FC = () => {
                 ))
               )}
             </tbody>
-          </table>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

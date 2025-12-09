@@ -82,9 +82,11 @@ const Dashboard: React.FC = () => {
   }));
 
   // Calculate utilization stats
-  const totalIPs = utilizationData?.totals?.totalIPs || 0;
-  const usedIPs = utilizationData?.totals?.usedIPs || 0;
-  const availableIPs = utilizationData?.totals?.availableIPs || 0;
+  // Use IPv4 totals from byVersion if available, otherwise fall back to combined totals
+  const totals = utilizationData?.byVersion?.ipv4 || utilizationData?.totals || {};
+  const totalIPs = totals.totalIPs || 0;
+  const usedIPs = totals.usedIPs || 0;
+  const availableIPs = totals.availableIPs || 0;
 
   const ipv4Data = [
     {
@@ -114,17 +116,17 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">IPAM Dashboard</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">IPAM Dashboard</h1>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
             Subnet Utilization Overview
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {totalIPs > 0 && ipv4Data.length > 0 ? (
               <PrefixStatisticsChart
                 title="IPv4 Utilization"
@@ -138,10 +140,59 @@ const Dashboard: React.FC = () => {
               </div>
             )}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Total Subnets</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-medium text-gray-500">Total Subnets</h3>
+                <div className="flex gap-2 text-xs">
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                    IPv4: {subnets.filter(s => s.ipVersion === 'IPv4').length}
+                  </span>
+                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded">
+                    IPv6: {subnets.filter(s => s.ipVersion === 'IPv6').length}
+                  </span>
+                </div>
+              </div>
               <p className="text-3xl font-bold text-gray-900">{subnets.length.toLocaleString()}</p>
             </div>
           </div>
+          {/* IPv6 Utilization Section */}
+          {utilizationData?.byVersion?.ipv6 && utilizationData.byVersion.ipv6.totalIPs > 0 && (
+            <div className="mt-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">IPv6 Utilization</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Total IPs</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {utilizationData.byVersion.ipv6.totalIPs >= Number.MAX_SAFE_INTEGER
+                        ? 'Very Large'
+                        : utilizationData.byVersion.ipv6.totalIPs.toLocaleString()}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Used</p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {utilizationData.byVersion.ipv6.usedIPs.toLocaleString()}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Reserved</p>
+                    <p className="text-2xl font-bold text-yellow-600">
+                      {utilizationData.byVersion.ipv6.reservedIPs.toLocaleString()}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Utilization</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {utilizationData.byVersion.ipv6.utilizationPercentage}%
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-4">
+                  Note: IPv6 address space is extremely large. Total IPs may be capped for display purposes.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div>

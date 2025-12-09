@@ -104,7 +104,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, maxWidt
       {/* Modal Content */}
       <div
         ref={modalRef}
-        className={`relative z-10 bg-white rounded-lg shadow-2xl w-full ${maxWidth} max-h-[90vh] overflow-y-auto transform transition-all scrollbar-hide`}
+        className={`relative z-10 bg-white rounded-lg shadow-2xl w-full sm:${maxWidth} max-h-[95vh] sm:max-h-[90vh] overflow-y-auto transform transition-all scrollbar-hide`}
         onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
         style={{
@@ -116,9 +116,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, maxWidt
         }}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-lg z-10">
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 rounded-t-lg z-10">
           <div className="flex items-center justify-between">
-            <h2 id="modal-title" className="text-xl font-bold text-gray-900">
+            <h2 id="modal-title" className="text-lg sm:text-xl font-bold text-gray-900">
               {title}
             </h2>
             <button
@@ -134,7 +134,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, maxWidt
         </div>
         
         {/* Body */}
-        <div className="px-6 py-4">
+        <div className="px-4 sm:px-6 py-4">
           {children}
         </div>
       </div>

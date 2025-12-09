@@ -173,9 +173,9 @@ const Reports: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Reports & Analytics</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Reports & Analytics</h1>
         <div className="flex items-center gap-3">
           <select
             value={exportFormat}

@@ -4,10 +4,12 @@ import { useAuth } from '../../contexts/AuthContext';
 
 interface HeaderProps {
   sidebarCollapsed?: boolean;
+  onMobileMenuToggle?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
-  sidebarCollapsed = false
+  sidebarCollapsed = false,
+  onMobileMenuToggle
 }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -39,18 +41,48 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className={`bg-white border-b border-gray-200 h-16 fixed top-0 ${sidebarCollapsed ? 'left-20' : 'left-64'} right-0 z-10 flex items-center justify-end px-6 transition-all duration-300`}>
-      <div className="flex items-center gap-4">
+    <header className={`
+      bg-white 
+      border-b 
+      border-gray-200 
+      h-16 
+      fixed 
+      top-0 
+      ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-64'} 
+      left-0
+      right-0 
+      z-20 
+      flex 
+      items-center 
+      justify-between
+      lg:justify-end
+      px-4
+      sm:px-6 
+      transition-all 
+      duration-300
+    `}>
+      {/* Mobile menu button */}
+      <button
+        onClick={onMobileMenuToggle}
+        className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        aria-label="Toggle menu"
+      >
+        <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <div className="flex items-center gap-2 sm:gap-4">
         <div className="flex items-center gap-3">
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm sm:text-base">
                 {userInitial}
               </div>
-              <div className="flex flex-col items-start">
+              <div className="hidden sm:flex flex-col items-start">
                 <span className="text-sm font-medium text-gray-900">{userName}</span>
               </div>
               <svg 

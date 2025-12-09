@@ -45,7 +45,15 @@ Create a `.env` file in the `client` directory:
 VITE_API_URL=http://localhost:3000/api
 ```
 
-If not set, the app defaults to `http://localhost:3000/api`.
+If not set, the app defaults to `https://ipam-yary.onrender.com/api` (production server).
+
+**For Vercel Deployment:**
+1. Go to your Vercel project settings
+2. Navigate to "Environment Variables"
+3. Add a new variable:
+   - Key: `VITE_API_URL`
+   - Value: `https://ipam-yary.onrender.com/api`
+4. Redeploy your application
 
 ## Running the Application
 
