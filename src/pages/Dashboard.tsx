@@ -7,7 +7,7 @@ import { subnetService, reportService } from '../services';
 import type { Subnet } from '../types';
 
 const Dashboard: React.FC = () => {
-  const [selectedPrefixIds, setSelectedPrefixIds] = useState<string[]>([]);
+  const [_selectedPrefixIds, setSelectedPrefixIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [subnets, setSubnets] = useState<Subnet[]>([]);

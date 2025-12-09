@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import type { ChartData } from '../../types';
 
 interface PrefixStatisticsChartProps {
@@ -39,7 +39,7 @@ const PrefixStatisticsChart: React.FC<PrefixStatisticsChartProps> = ({ title, to
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={validData}
+                data={validData as any}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}

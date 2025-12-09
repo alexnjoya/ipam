@@ -185,7 +185,7 @@ const Settings: React.FC = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-500">
-                              {new Date(user.createdAt).toLocaleDateString()}
+                              {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
